@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>أبشر – الهوية بلا إنترنت</title>
+    <style>
+
+        body {
+            font-family: "Tahoma", Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        /* شريط علوي */
+        .header {
+            background-color: #0a8f3d;
+            color: white;
+            padding: 18px 25px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* قائمة جانبية */
+        .sidebar {
+            width: 240px;
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 70px;
+            right: 0;
+            padding-top: 20px;
+            border-left: 1px solid #ddd;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 14px 20px;
+            color: #333;
+            font-size: 16px;
+            text-decoration: none;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .sidebar a:hover {
+            background-color: #e8f5e9;
+            color: #0a8f3d;
+        }
+
+        /* محتوى الصفحة */
+        .content {
+            margin-right: 260px;
+            padding: 25px;
+        }
+
+        h2 {
+            color: #0a8f3d;
+            margin-top: 0;
+        }
+
+        /* بطاقة */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* زر */
+        button {
+            background-color: #0a8f3d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #066b2f;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        أبشر – هوية بلا إنترنت
+    </div>
+
+    <div class="sidebar">
+        <a href="#">لوحة التحكم</a>
+        <a href="#">الخدمات</a>
+        <a href="#">رفع الهوية</a>
+        <a href="#">الحفظ الآمن للمسودات</a>
+        <a href="#">التنبؤ بالاتصال</a>
+        <a href="#">الإعدادات</a>
+    </div>
+
+    <div class="content">
+        <h2>الخدمة الأساسية – نموذج تقديم طلب</h2>
+
+        <div class="card">
+            <form id="requestForm">
+
+                <label>رقم الهوية:</label>
+                <input type="text" id="idNumber">
+
+                <label>نوع الخدمة:</label>
+                <select id="serviceType">
+                    <option value="renew">تجديد الهوية</option>
+                    <option value="issue">إصدار هوية جديدة</option>
+                    <option value="replace">بدل فاقد</option>
+                    <option value="update">تحديث بيانات</option>
+                </select>
+
+                <label>رفع صورة الهوية:</label>
+                <input type="file" id="idUploader" accept="image/*">
+
+                <label>ملاحظات:</label>
+                <textarea id="notes" rows="4"></textarea>
+
+                <button type="button">إرسال الطلب</button>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
