@@ -3,183 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمة أبشر – بدون إنترنت</title>
+    <title>محاكاة لوحة تحكم أبشر</title>
 
-    <!-- خط حكومي شبيه أبشر -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
+        /* ======================= */
+        /* التنسيقات الأساسية والمتغيرات */
+        /* ======================= */
+        :root {
+            --absher-green: #008940; /* لون أبشر الأخضر */
+            --absher-light-green: #e9f5ee; /* أخضر فاتح للخلفيات */
+            --absher-gray: #f7f7f7; /* رمادي خفيف للخلفية */
+            --absher-text: #333;
         }
 
+        body {
+            font-family: "Tahoma", sans-serif;
+            margin: 0;
+            background-color: var(--absher-gray);
+            color: var(--absher-text);
+        }
+        
+        /* ======================= */
+        /* الشريط العلوي (Header) */
+        /* ======================= */
         .header {
-            background-color: #0c7a3e;
-            padding: 20px;
-            color: #fff;
-            text-align: center;
-            font-size: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            background-color: white;
+            border-bottom: 2px solid var(--absher-light-green);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-img {
+            width: 70px;
+            height: auto;
+        }
+
+        .nav-links a {
+            color: var(--absher-green);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            font-size: 14px;
             font-weight: bold;
         }
 
-        .container {
-            max-width: 650px;
-            margin: 30px auto;
-            background: #fff;
+        .nav-links a:hover {
+            background-color: var(--absher-light-green);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--absher-green);
+        }
+
+        /* ======================= */
+        /* الهيكل العام (Main Layout) */
+        /* ======================= */
+        .main-container {
+            display: flex;
+            max-width: 1400px; /* لتقريب شكل الواجهات الحكومية */
+            margin: 20px auto;
+            gap: 20px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            background-color: white;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #cccccc65;
-        }
-
-        .status-bar {
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .online {
-            background-color: #e8f8ef;
-            color: #0c7a3e;
-            border: 1px solid #0c7a3e;
-        }
-
-        .offline {
-            background-color: #fdecea;
-            color: #b71c1c;
-            border: 1px solid #b71c1c;
-        }
-
-        label {
-            font-weight: 600;
-            margin-top: 15px;
-            display: block;
-            color: #333;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 13px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
             border-radius: 8px;
-            font-size: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
         }
 
-        textarea {
-            resize: vertical;
-            height: 120px;
+        /* ======================= */
+        /* القائمة الجانبية (Sidebar) */
+        /* ======================= */
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            padding: 20px 0;
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
+        .sidebar-header {
             font-size: 18px;
             font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            background-color: #0c7a3e;
-            color: white;
-            cursor: pointer;
+            color: var(--absher-green);
+            padding: 0 20px 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
         }
 
-        button:hover {
-            background-color: #0a6934;
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--absher-text);
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            font-weight: 500;
         }
 
-        .file-box {
-            border: 2px dashed #0c7a3e;
-            padding: 15px;
+        .sidebar-item i {
+            margin-left: 10px;
+            font-size: 18px;
+            color: var(--absher-green);
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: var(--absher-light-green);
+            color: var(--absher-green);
+            border-right: 4px solid var(--absher-green);
+        }
+
+        /* ======================= */
+        /* منطقة البحث (Search) */
+        /* ======================= */
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: var(--absher-gray);
+        }
+
+        /* ======================= */
+        /* أيقونات الخدمات (Service Icons) */
+        /* ======================= */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            padding-top: 20px;
+        }
+
+        .service-card {
+            background-color: white;
+            border: 1px solid #eee;
             border-radius: 10px;
+            overflow: hidden;
             text-align: center;
-            color: #0c7a3e;
-            cursor: pointer;
-            margin-top: 10px;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+        
+        .service-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 137, 64, 0.15); /* ظل بلون أخضر خفيف */
+            transform: translateY(-2px);
+        }
+
+        .icon-box {
+            padding: 30px 10px 15px;
+        }
+
+        .icon-box i {
+            font-size: 40px;
+            color: var(--absher-green);
+            border: 1px solid var(--absher-light-green);
+            border-radius: 50%;
+            padding: 20px;
+            background-color: var(--absher-light-green);
+        }
+
+        .service-name {
+            background-color: var(--absher-green);
+            color: white;
+            padding: 12px 10px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .service-name a {
+            color: white;
+            text-decoration: none;
+            display: block;
         }
     </style>
-
 </head>
 <body>
 
-    <div class="header">خدمة أبشر – تقديم طلب بدون إنترنت</div>
+    <header class="header">
+        <div class="logo-section">
+            <img src="https://via.placeholder.com/70x70/008940/FFFFFF?text=Absher" alt="شعار أبشر" class="logo-img">
+            <img src="https://via.placeholder.com/70x70/008940/FFFFFF?text=Vision" alt="رؤية 2030" class="logo-img">
+        </div>
+        
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-arrow-right"></i> تسجيل الخروج</a>
+            <a href="#"><i class="fas fa-language"></i> English</a>
+            <a href="#"><i class="fas fa-book"></i> دليل الخدمات</a>
+            <a href="#"><i class="fas fa-bell"></i> الإشعارات</a>
+            <a href="#"><i class="fas fa-list"></i> تعديل معلومات المستخدم</a>
+            <a href="#"><i class="fas fa-file-alt"></i> وثيقة المعلومات</a>
+        </div>
 
-    <div class="container">
+        <div class="user-profile">
+            <span>يوسف</span>
+            <img src="https://via.placeholder.com/40x40/008940/FFFFFF?text=Y" alt="صورة الملف الشخصي">
+        </div>
+    </header>
 
-        <!-- حالة الاتصال -->
-        <div id="connectionStatus" class="status-bar online">✔ الاتصال ممتاز</div>
+    <div class="main-container">
 
-        <!-- النموذج -->
-        <form id="absherForm">
+        <aside class="sidebar">
+            <div class="sidebar-header">الخدمات الإلكترونية</div>
+            <a href="#" class="sidebar-item active">
+                <i class="fas fa-file-invoice"></i> التفاويض
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-check-square"></i> استبيانات أبشر
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-money-check-alt"></i> المدفوعات الحكومية
+            </a>
+            </aside>
 
-            <label>رقم الهوية / الإقامة</label>
-            <input type="text" id="nid" placeholder="أدخل رقم الهوية">
+        <main class="content-area">
+            
+            <div class="search-container">
+                <input type="text" placeholder="اكتب هنا للبحث" class="search-input">
+                </div>
 
-            <label>نوع الخدمة المطلوبة</label>
-            <select id="serviceType">
-                <option value="">اختر الخدمة</option>
-                <option>تجديد الهوية</option>
-                <option>إصدار إقامة</option>
-                <option>نقل خدمات</option>
-                <option>تحديث العنوان الوطني</option>
-                <option>فتح بلاغ</option>
-                <option>الإبلاغ عن وثائق مفقودة</option>
-                <option>تفعيل الخدمات الإلكترونية</option>
-            </select>
+            <div class="services-grid">
+                
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">مواعيد</a>
+                    </div>
+                </div>
 
-            <label>ملاحظات إضافية</label>
-            <textarea id="notes" placeholder="اكتب تفاصيل إضافية (اختياري)"></textarea>
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">العمالة</a>
+                    </div>
+                </div>
 
-            <label>رفع صورة الهوية</label>
-            <div class="file-box" onclick="document.getElementById('idUpload').click();">
-                اضغط لرفع صورة الهوية
-            </div>
-            <input type="file" id="idUpload" accept="image/*" style="display:none">
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">أفراد الأسرة</a>
+                    </div>
+                </div>
 
-            <button type="submit">إرسال الطلب</button>
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">المركبات</a>
+                    </div>
+                </div>
 
-        </form>
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">خدماتي</a>
+                    </div>
+                </div>
+                
+                </div>
+        </main>
     </div>
 
-    <script>
-        // فحص الاتصال
-        function checkConnection() {
-            if (navigator.onLine) {
-                connectionStatus.className = "status-bar online";
-                connectionStatus.innerHTML = "✔ الاتصال ممتاز";
-            } else {
-                connectionStatus.className = "status-bar offline";
-                connectionStatus.innerHTML = "⚠ لا يوجد اتصال – سيتم حفظ الطلب محليًا";
-            }
+</body>
+</html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكاة لوحة تحكم أبشر</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ======================= */
+        /* التنسيقات الأساسية والمتغيرات */
+        /* ======================= */
+        :root {
+            --absher-green: #008940; /* لون أبشر الأخضر */
+            --absher-light-green: #e9f5ee; /* أخضر فاتح للخلفيات */
+            --absher-gray: #f7f7f7; /* رمادي خفيف للخلفية */
+            --absher-text: #333;
         }
 
-        setInterval(checkConnection, 2000);
-        checkConnection();
+        body {
+            font-family: "Tahoma", sans-serif;
+            margin: 0;
+            background-color: var(--absher-gray);
+            color: var(--absher-text);
+        }
+        
+        /* ======================= */
+        /* الشريط العلوي (Header) */
+        /* ======================= */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            background-color: white;
+            border-bottom: 2px solid var(--absher-light-green);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
 
-        // تخزين الطلب عند عدم وجود إنترنت
-        document.getElementById("absherForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-            const data = {
-                nid: nid.value,
-                service: serviceType.value,
-                notes: notes.value,
-                timestamp: new Date().toLocaleString()
-            };
+        .logo-img {
+            width: 70px;
+            height: auto;
+        }
 
-            if (!navigator.onLine) {
-                localStorage.setItem("offlineRequest", JSON.stringify(data));
-                alert("تم حفظ الطلب محليًا بسبب عدم وجود اتصال.");
-            } else {
-                alert("✔ تم إرسال الطلب بنجاح!");
-            }
-        });
-    </script>
+        .nav-links a {
+            color: var(--absher-green);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--absher-light-green);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--absher-green);
+        }
+
+        /* ======================= */
+        /* الهيكل العام (Main Layout) */
+        /* ======================= */
+        .main-container {
+            display: flex;
+            max-width: 1400px; /* لتقريب شكل الواجهات الحكومية */
+            margin: 20px auto;
+            gap: 20px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        /* ======================= */
+        /* القائمة الجانبية (Sidebar) */
+        /* ======================= */
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--absher-green);
+            padding: 0 20px 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--absher-text);
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+            font-weight: 500;
+        }
+
+        .sidebar-item i {
+            margin-left: 10px;
+            font-size: 18px;
+            color: var(--absher-green);
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: var(--absher-light-green);
+            color: var(--absher-green);
+            border-right: 4px solid var(--absher-green);
+        }
+
+        /* ======================= */
+        /* منطقة البحث (Search) */
+        /* ======================= */
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: var(--absher-gray);
+        }
+
+        /* ======================= */
+        /* أيقونات الخدمات (Service Icons) */
+        /* ======================= */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            padding-top: 20px;
+        }
+
+        .service-card {
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+        
+        .service-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 137, 64, 0.15); /* ظل بلون أخضر خفيف */
+            transform: translateY(-2px);
+        }
+
+        .icon-box {
+            padding: 30px 10px 15px;
+        }
+
+        .icon-box i {
+            font-size: 40px;
+            color: var(--absher-green);
+            border: 1px solid var(--absher-light-green);
+            border-radius: 50%;
+            padding: 20px;
+            background-color: var(--absher-light-green);
+        }
+
+        .service-name {
+            background-color: var(--absher-green);
+            color: white;
+            padding: 12px 10px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .service-name a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo-section">
+            <img src="https://via.placeholder.com/70x70/008940/FFFFFF?text=Absher" alt="شعار أبشر" class="logo-img">
+            <img src="https://via.placeholder.com/70x70/008940/FFFFFF?text=Vision" alt="رؤية 2030" class="logo-img">
+        </div>
+        
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-arrow-right"></i> تسجيل الخروج</a>
+            <a href="#"><i class="fas fa-language"></i> English</a>
+            <a href="#"><i class="fas fa-book"></i> دليل الخدمات</a>
+            <a href="#"><i class="fas fa-bell"></i> الإشعارات</a>
+            <a href="#"><i class="fas fa-list"></i> تعديل معلومات المستخدم</a>
+            <a href="#"><i class="fas fa-file-alt"></i> وثيقة المعلومات</a>
+        </div>
+
+        <div class="user-profile">
+            <span>يوسف</span>
+            <img src="https://via.placeholder.com/40x40/008940/FFFFFF?text=Y" alt="صورة الملف الشخصي">
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">الخدمات الإلكترونية</div>
+            <a href="#" class="sidebar-item active">
+                <i class="fas fa-file-invoice"></i> التفاويض
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-check-square"></i> استبيانات أبشر
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-money-check-alt"></i> المدفوعات الحكومية
+            </a>
+            </aside>
+
+        <main class="content-area">
+            
+            <div class="search-container">
+                <input type="text" placeholder="اكتب هنا للبحث" class="search-input">
+                </div>
+
+            <div class="services-grid">
+                
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">مواعيد</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">العمالة</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">أفراد الأسرة</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">المركبات</a>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="service-name">
+                        <a href="#">خدماتي</a>
+                    </div>
+                </div>
+                
+                </div>
+        </main>
+    </div>
 
 </body>
 </html>
