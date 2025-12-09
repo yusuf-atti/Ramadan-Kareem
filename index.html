@@ -199,19 +199,20 @@
         .btn-secondary { background-color: #f3f4f6; color: var(--text-main); }
 
         .pending-toast {
-            position: absolute;
-            bottom: 90px; left: 20px; right: 20px;
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            padding: 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transform: translateY(150%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
+            position: absolute;
+            bottom: 90px; left: 20px; right: 20px;
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            padding: 15px;
+            border-radius: 15px;
+            display: none; /* **تم التعديل هنا: إخفاء العنصر** */
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            /* تم إزالة الـ transform هنا لأن العنصر أصبح مخفياً */
+            transition: none;
+            z-index: 100;
+        }
         }
         .pending-toast.active { transform: translateY(0); }
 
