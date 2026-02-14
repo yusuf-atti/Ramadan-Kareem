@@ -1,468 +1,523 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي أبشر - MVP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة التهنئة الرسمية | صحيفة الحقيقة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&amp;family=Tajawal:wght@300;500;800&amp;family=Amiri:wght@700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
         :root {
-            --primary: #007f3d;
-            --primary-dark: #005c2c;
-            --bg-light: #f8f9fa;
-            --text-main: #1f2937;
-            --white: #ffffff;
+            --gold: #d4a574;
+            --gold-light: #e8c4a0;
+            --gold-dark: #8b6f47;
+            --bg-deep: #0a0e27;
+            --bg-darker: #050609;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #e5e5e5;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 111, 71, 0.08) 0%, transparent 50%);
+            font-family: 'Cairo', sans-serif;
+            color: #e2e8f0;
+            overflow-x: hidden;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
         }
 
-        .mobile-frame {
-            width: 390px;
-            height: 844px;
-            background-color: var(--bg-light);
-            border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
+        .glass-card {
+            background: linear-gradient(135deg, var(--glass) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(212, 165, 116, 0.25);
+            border-radius: 32px;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
-            border: 12px solid #1a1a1a;
-            display: flex;
-            flex-direction: column;
         }
 
-        .header {
-            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 50px 20px 25px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,127,61,0.2);
-            flex-shrink: 0;
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+            border-radius: 32px;
+            pointer-events: none;
         }
 
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .glass-card:hover {
+            background: linear-gradient(135deg, var(--glass-hover) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border-color: rgba(212, 165, 116, 0.45);
+            box-shadow: 0 25px 80px rgba(212, 165, 116, 0.2), inset 0 0 30px rgba(212, 165, 116, 0.05);
+            transform: translateY(-3px);
         }
 
-        .user-welcome h2 { margin: 0; font-size: 20px; font-weight: 800; }
-        .user-welcome p { margin: 5px 0 0; opacity: 0.9; font-size: 13px; letter-spacing: 1px; }
-
-        .status-bar {
-            margin: -20px 20px 15px;
-            padding: 10px;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 13px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.4s ease;
-            position: relative;
-            z-index: 10;
-        }
-        .online { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-        .offline { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-        .content {
-            flex: 1;
-            padding: 10px 20px;
-            overflow-y: auto;
-            padding-bottom: 80px; 
+        .gold-text {
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8c4a0 20%, #d4a574 40%, #a0826d 70%, #8b6f47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 10px rgba(212, 165, 116, 0.3));
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin: 20px 0 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .section-title::before {
-            content: ''; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; display: block;
+        #particleCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            border: 1px solid #f0f0f0;
-            transition: transform 0.2s;
-        }
-        .card:active { transform: scale(0.98); }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .card-header h3 { margin: 0; font-size: 16px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-        
-        .icon-box {
-            width: 35px; height: 35px;
-            background: var(--bg-light);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
+        @keyframes shimmer-gold {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
         }
 
-        /* الهوية الرقمية والباركود */
-        .digital-id {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            color: #ecfdf5;
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes glow-pulse-intense {
+            0%, 100% { box-shadow: 0 0 30px rgba(212, 165, 116, 0.5), 0 0 60px rgba(212, 165, 116, 0.25); }
+            50% { box-shadow: 0 0 50px rgba(212, 165, 116, 0.7), 0 0 100px rgba(212, 165, 116, 0.4); }
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #f5e6d3 0%, #d4a574 35%, #a0826d 100%);
+            color: #0a0e27 !important;
+            box-shadow: 0 20px 50px rgba(212, 165, 116, 0.45), 0 0 40px rgba(212, 165, 116, 0.25);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            font-weight: 900;
+            letter-spacing: 2px;
             border: none;
         }
-        
-        /* تنسيق العمود الأيسر للصورة والباركود */
-        .id-media-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
 
-        .qr-section {
-            background: white;
-            padding: 5px;
-            border-radius: 8px;
-            width: 70px; /* تصغير قليل لاستيعاب الصورة */
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-        }
-        .qr-section::after {
-            content: ''; position: absolute; width: 100%; height: 3px;
-            background: var(--primary); box-shadow: 0 0 8px var(--primary);
-            top: 0; left: 0; animation: scan 1.8s ease-in-out infinite alternate;
-        }
-        .qr-code-icon { color: var(--text-main); font-size: 2.5em; animation: pulse 2s infinite; }
-        
-        /* تنسيق الصورة الشخصية */
-        .user-photo-frame {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.2);
-            overflow: hidden;
-            background: #ccc;
-        }
-        .user-photo-frame img {
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+            z-index: 1;
         }
 
-        @keyframes scan { 0% { top: 0; opacity: 0.6; } 100% { top: 100%; opacity: 0.6; } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .download-btn:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 30px 70px rgba(212, 165, 116, 0.6), 0 0 60px rgba(212, 165, 116, 0.35);
+        }
 
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 12px;
-            font-weight: 700;
+        .download-btn:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .download-btn:active:not(:disabled) {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .download-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .template-option {
             cursor: pointer;
-            margin-top: 10px;
-            font-family: 'Tajawal', sans-serif;
-            transition: background 0.3s;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
         }
-        .btn:hover { background-color: var(--primary-dark); }
-        .btn-secondary { background-color: #f3f4f6; color: var(--text-main); }
 
-        .pending-toast {
-            position: absolute;
-            bottom: 90px; left: 20px; right: 20px;
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            padding: 15px;
-            border-radius: 15px;
-            display: none; /* **تم التعديل هنا: إخفاء العنصر** */
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            /* تم إزالة الـ transform هنا لأن العنصر أصبح مخفياً */
-            transition: none;
-            z-index: 100;
-        }
-        }
-        .pending-toast.active { transform: translateY(0); }
-
-        .nav-bar {
+        .template-option::after {
+            content: '';
             position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: white;
-            padding: 15px 30px 25px;
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #eee;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: left 0.6s;
+            z-index: 2;
         }
-        .nav-item { color: #9ca3af; font-size: 20px; cursor: pointer; }
-        .nav-item.active { color: var(--primary); }
 
-        .demo-panel {
-            position: absolute;
-            right: -220px; top: 50px;
-            width: 200px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            display: none;
+        .template-option:hover::after {
+            left: 100%;
         }
-        @media (min-width: 800px) { .demo-panel { display: block; } }
-        
-        .switch-btn {
-            display: block; width: 100%;
-            padding: 10px; margin-bottom: 10px;
-            border: 2px solid #eee; background: white;
-            border-radius: 8px; cursor: pointer;
+
+        .template-option.active {
+            border-color: var(--gold);
+            transform: scale(1.12);
+            box-shadow: 0 0 40px rgba(212, 165, 116, 0.6), 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        input[type="text"] {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border: 1px solid rgba(212, 165, 116, 0.25) !important;
+            color: white !important;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        input[type="text"]:focus {
+            background-color: rgba(0, 0, 0, 0.4) !important;
+            border-color: rgba(212, 165, 116, 0.6) !important;
+            box-shadow: 0 0 30px rgba(212, 165, 116, 0.4), inset 0 0 20px rgba(212, 165, 116, 0.1) !important;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(212, 165, 116, 0.05) 100%);
+            border: 1.5px solid rgba(212, 165, 116, 0.35);
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #d4a574;
+            letter-spacing: 1.5px;
+            animation: glow-pulse-intense 2.5s ease-in-out infinite;
+        }
+
+        header {
+            position: relative;
+            z-index: 20;
+        }
+
+        @media (max-width: 768px) {
+            .canvas-preview { order: -1; }
         }
     </style>
-</head>
-<body>
-
-    <div class="mobile-frame">
-        <div class="header">
-            <div class="header-top">
-                <i class="fas fa-bars fa-lg"></i>
-                <i class="fas fa-bell fa-lg"></i>
-            </div>
-            <div class="user-welcome">
-                <h2>مرحباً، يوسف</h2>
-                <p>الهوية الوطنية: 1034911469</p>
-            </div>
-        </div>
-
-        <div id="statusIndicator" class="status-bar online">
-            <i class="fas fa-wifi"></i> <span>متصل بالإنترنت</span>
-        </div>
-
-        <div class="content">
-            
-            <div class="card digital-id">
-                <div class="card-header">
-                    <h3 style="color: white;"><i class="fas fa-shield-alt"></i> الهوية الرقمية</h3>
-                    <i class="fas fa-check-circle" style="color: #34d399;"></i>
-                </div>
-                <div style="display: flex; align-items: flex-start; justify-content: space-between;">
-                    <div style="padding-top: 10px;">
-                        <p style="margin: 0; font-size: 12px; opacity: 0.8;">الاسم الرباعي</p>
-                        <p style="margin: 0 0 15px; font-weight: bold; font-size: 16px;">يوسف زيلع محمد عاتي</p>
-                        
-                        <p style="margin: 0; font-size: 12px; opacity: 0.8;">تاريخ الميلاد</p>
-                        <p style="margin: 0 0 15px; font-weight: bold;">1400/08/07</p>
-
-                        <p style="margin: 0; font-size: 12px; opacity: 0.8;">رقم النسخة</p>
-                        <p style="margin: 0; font-weight: bold;">7</p>
-                    </div>
-
-                    <div class="id-media-col">
-                        <div class="qr-section">
-                            <i class="fas fa-qrcode qr-code-icon"></i>
-                        </div>
-                        <div class="user-photo-frame">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY-I-n1Ad9xArShctMv6Jjnkv9riX7mtru1_vfdTPATA&s=10" alt="صورة المستخدم">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 class="section-title">خدماتي</h3>
-
-            <div class="card" id="trafficCard">
-                <div class="card-header">
-                    <h3><div class="icon-box"><i class="fas fa-traffic-light"></i></div> المرور</h3>
-                    <i class="fas fa-arrow-left" id="backBtn" style="cursor: pointer; display: none; color: #6b7280;" onclick="resetTrafficCard()"></i>
-                </div>
-
-                <div id="step-1">
-                    <button class="btn" onclick="goToStep2()">تمديد مخالفة مرورية</button>
-                    <button class="btn btn-secondary" style="margin-top: 10px;">الاستعلام عن المخالفات</button>
-                </div>
-
-                <div id="step-2" style="display: none;">
-                    <div style="background: #f3f4f6; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e5e7eb;">
-                        <p style="margin: 0 0 5px; font-size: 12px; color: #6b7280;">رقم المخالفة</p>
-                        <h2 style="margin: 0; color: var(--text-main); letter-spacing: 1px;">1234567890</h2>
-                        <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 13px;">
-                            <span>تاريخ المخالفة:</span>
-                            <span style="font-weight: bold;">1445/03/15</span>
-                        </div>
-                    </div>
-                    <button class="btn" onclick="processExtension()">تمديد المخالفة 90 يوم</button>
-                </div>
-
-                <div id="step-3" style="display: none; text-align: center; padding: 20px 0;">
-                    <div style="width: 60px; height: 60px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
-                        <i class="fas fa-check fa-2x" style="color: #059669;"></i>
-                    </div>
-                    <h3 style="margin: 0 0 10px;">تم تمديد المخالفة 90 يوم</h3>
-                    <button class="btn btn-secondary" style="margin-top: 20px;" onclick="resetTrafficCard()">عودة للخدمات</button>
-                </div>
-            </div>
-
-           <div class="card">
- <div class="card-header">
- <h3><div class="icon-box"><i class="fas fa-users"></i></div> أفراد الأسرة</h3>
- </div>
-  <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
-
- <div style="min-width: 80px; text-align: center;">
-<div style="width: 55px; height: 55px; background: #fef2f2; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-female" style="color: #dc2626;"></i></div>
- <span style="font-size: 12px; color: #000102;">(زوجة) حشيمة بنت ضيف الله شرقي</span>
- </div>
-
- </div>
- </div>
-
-        </div>
-
-        <div id="pendingToast" class="pending-toast">
-            <i class="fas fa-cloud-upload-alt fa-lg" style="color: #d97706;"></i>
-            <div>
-                <strong style="display: block; color: #92400e;">وضع عدم الاتصال</strong>
-                <span id="pendingText" style="font-size: 12px; color: #b45309;">تم حفظ طلبك للمزامنة لاحقاً</span>
-            </div>
-        </div>
-
-        <div class="nav-bar">
-            <div class="nav-item active"><i class="fas fa-home"></i></div>
-            <div class="nav-item"><i class="fas fa-wallet"></i></div>
-            <div class="nav-item"><i class="fas fa-list"></i></div>
-            <div class="nav-item"><i class="fas fa-user"></i></div>
-        </div>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-screen">
+  <canvas id="particleCanvas"></canvas>
+  <header class="w-full py-10 px-6 lg:px-20 flex justify-between items-center text-right">
+   <div class="flex items-center gap-6 flex-row-reverse group">
+    <div class="w-16 h-16 glass-card flex items-center justify-center border-gold/40 shadow-2xl transition-all group-hover:shadow-[0_20px_50px_rgba(212,165,116,0.4)]"><span class="gold-text font-black text-4xl">ح</span>
     </div>
-
-    <div class="demo-panel">
-        <h4><i class="fas fa-cogs"></i> تحكم العرض</h4>
-        <button class="switch-btn" onclick="toggleNetwork()">
-            <i class="fas fa-wifi"></i> تبديل الاتصال
-        </button>
-        <button class="switch-btn" onclick="clearData()" style="color: red;">
-            <i class="fas fa-trash"></i> مسح البيانات
-        </button>
+    <div class="text-right">
+     <h1 class="text-3xl font-black gold-text tracking-tight transition-all">صحيفة الحقيقة</h1>
+     <p class="text-[10px] text-gray-400 tracking-[0.4em] font-light opacity-70">Al Haqiqa Premium Platform</p>
     </div>
+   </div><button onclick="toggleAdmin()" class="px-8 py-3 rounded-full text-[10px] font-black border border-white/15 hover:bg-white/8 transition-all duration-500 uppercase tracking-widest text-gray-300 hover:text-gold hover:border-gold/50">Admin Panel</button>
+  </header>
+  <main class="max-w-[1400px] mx-auto px-6 lg:px-20 py-4 grid grid-cols-1 lg:grid-cols-12 gap-16 relative z-10">
+   <section class="lg:col-span-5 xl:col-span-4 space-y-8">
+    <div class="glass-card p-10 lg:p-12 space-y-8 shadow-2xl border-white/5">
+     <div class="text-right space-y-3">
+      <h2 class="text-3xl font-black gold-text mb-3">بطاقة رمضان الفاخرة</h2>
+      <p class="text-[13px] text-gray-400 font-light leading-relaxed">أنشئ بطاقة تهنئة احترافية بأعلى جودة. تصميم حصري فاخر مع شعار أصلي وتأثيرات متقدمة.</p>
+      <div class="status-badge pt-2">
+       الطبعة الذهبية المحدودة
+      </div>
+     </div>
+     <div class="space-y-8">
+      <div class="text-right space-y-3"><label class="block text-[11px] font-black text-gray-300 uppercase mb-4 tracking-[0.3em]">الاسم المراد ظهوره</label> <input type="text" id="memberName" placeholder="مثال: يوسف الشريف" class="w-full rounded-2xl px-6 py-5 focus:border-gold outline-none transition-all text-white text-lg font-bold shadow-inner text-right" oninput="debouncedDraw()">
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+       <div class="relative text-right space-y-3"><label class="block text-[11px] font-black text-gray-300 uppercase mb-4 tracking-[0.3em]">الصورة الشخصية</label> <input type="file" id="memberPhoto" accept="image/*" class="hidden" onchange="handleImageUpload(event)"> <button onclick="document.getElementById('memberPhoto').click()" class="w-full py-6 glass-card border-2 border-dashed border-white/20 text-[12px] font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-3 rounded-2xl hover:border-gold/50">
+         <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
+         </svg> ارفع صورتك </button>
+       </div>
+       <div class="text-right space-y-3"><label class="block text-[11px] font-black text-gray-300 uppercase mb-4 tracking-[0.3em]">خلفية البطاقة</label>
+        <div class="grid grid-cols-5 gap-3 h-[70px]">
+         <div onclick="updateTemplate('royal', this)" class="template-option active rounded-xl bg-white border border-gray-200 transition-all"></div>
+         <div onclick="updateTemplate('ramadan', this)" class="template-option rounded-xl bg-gradient-to-br from-emerald-900 to-emerald-700"></div>
+         <div onclick="updateTemplate('night', this)" class="template-option rounded-xl bg-gradient-to-br from-indigo-950 to-indigo-900"></div>
+         <div onclick="updateTemplate('press', this)" class="template-option rounded-xl bg-gradient-to-br from-slate-950 to-slate-800"></div>
+         <div onclick="updateTemplate('gold', this)" class="template-option rounded-xl bg-gradient-to-br from-yellow-600 to-amber-700"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="pt-8 border-t border-white/10"><button id="downloadBtn" onclick="processAndDownload()" class="download-btn w-full text-[14px] font-black py-7 rounded-3xl flex items-center justify-center gap-4 group"> <span>اعتماد وتحميل البطاقة</span>
+       <svg class="w-6 h-6 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+       </svg></button>
+      <div class="text-center space-y-2 mt-6">
+       <p id="statusMsg" class="text-[11px] text-gray-400 font-light tracking-wide uppercase">جاهز للتحميل بدقة 1080×1620 بجودة عالية</p>
+       <p class="text-[10px] text-gray-600 font-light">الملف سيُحفظ بصيغة PNG عالية الجودة</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="lg:col-span-7 xl:col-span-8 flex flex-col items-center canvas-preview">
+    <div class="relative group w-full max-w-[550px]">
+     <div class="absolute -inset-3 bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 blur-3xl opacity-60 rounded-[50px]"></div>
+     <div class="relative bg-transparent overflow-hidden rounded-[45px] shadow-[0_60px_120px_-20px_rgba(212,165,116,0.3)] border border-white/5">
+      <canvas id="mainCanvas" width="1080" height="1620" class="w-full h-auto block bg-white"></canvas>
+     </div>
+    </div>
+   </section>
+  </main>
+  <div id="adminPanel" class="fixed inset-0 bg-black/99 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-3xl">
+   <div class="glass-card max-w-2xl w-full p-12 space-y-8 border-gold/15 text-right">
+    <div class="flex justify-between items-center border-b border-white/15 pb-8"><button onclick="toggleAdmin()" class="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white transition-all hover:text-gold font-bold text-lg">✕</button>
+     <div>
+      <h3 class="text-3xl font-black gold-text">سجلات النظام</h3>
+      <p class="text-[11px] text-gray-500 mt-2 uppercase tracking-widest">Operation Audit Logs</p>
+     </div>
+    </div>
+    <div class="bg-black/50 p-8 rounded-3xl max-h-[400px] overflow-y-auto" id="logsList"></div>
+   </div>
+  </div>
+  <script>
+        const LOGO_BASE64 = "data:image/png;base64,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";
 
-    <script>
-        let isOnline = navigator.onLine;
-        let pendingQueue = [];
+        const pCanvas = document.getElementById('particleCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        let stars = [];
 
-        try {
-            const savedData = localStorage.getItem('absherQueue');
-            if (savedData) {
-                pendingQueue = JSON.parse(savedData);
+        function initStars() {
+            pCanvas.width = window.innerWidth;
+            pCanvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<120; i++) {
+                stars.push({
+                    x: Math.random() * pCanvas.width,
+                    y: Math.random() * pCanvas.height,
+                    size: Math.random() * 2.5,
+                    opacity: Math.random() * 0.7,
+                    speed: Math.random() * 0.008 + 0.002
+                });
             }
-        } catch (e) { console.error(e); }
+        }
 
-        window.addEventListener('online', () => updateNetworkStatus(true));
-        window.addEventListener('offline', () => updateNetworkStatus(false));
-        window.onload = () => updateNetworkStatus(navigator.onLine);
+        function animateStars() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            stars.forEach(s => {
+                s.opacity += s.speed;
+                if(s.opacity > 1 || s.opacity < 0) s.speed *= -1;
+                pCtx.fillStyle = `rgba(212, 165, 116, ${s.opacity * 0.6})`;
+                pCtx.beginPath();
+                pCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                pCtx.fill();
+            });
+            requestAnimationFrame(animateStars);
+        }
 
-        function updateNetworkStatus(status) {
-            isOnline = status;
-            const statusEl = document.getElementById('statusIndicator');
-            if (statusEl) {
-                if (isOnline) {
-                    statusEl.className = 'status-bar online';
-                    statusEl.innerHTML = '<i class="fas fa-wifi"></i> <span>متصل بالإنترنت</span>';
-                    if (pendingQueue.length > 0) processQueue();
-                } else {
-                    statusEl.className = 'status-bar offline';
-                    statusEl.innerHTML = '<i class="fas fa-wifi-slash"></i> <span>غير متصل (بيانات محفوظة)</span>';
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const config = {
+            currentTemplate: 'royal',
+            userImg: null,
+            logoImg: new Image(),
+            templates: {
+                royal: { bg: '#ffffff', accent: '#d4a574', text: '#8b4513', secondary: '#555555' },
+                ramadan: { bg: 'linear(90deg, #064e3b 0%, #047857 100%)', accent: '#fbbf24', text: '#ffffff', secondary: '#a7f3d0' },
+                night: { bg: 'linear(90deg, #1e1b4b 0%, #312e81 100%)', accent: '#818cf8', text: '#ffffff', secondary: '#c7d2fe' },
+                press: { bg: 'linear(90deg, #0f172a 0%, #1e293b 100%)', accent: '#3b82f6', text: '#ffffff', secondary: '#94a3b8' },
+                gold: { bg: 'linear(90deg, #d4a574 0%, #c5865e 100%)', accent: '#ffffff', text: '#2d1810', secondary: '#f5f5f5' }
+            }
+        };
+
+        config.logoImg.src = LOGO_BASE64;
+        config.logoImg.onload = () => drawCard();
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => { config.userImg = img; drawCard(); };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function drawCard() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const t = config.templates[config.currentTemplate];
+            const name = document.getElementById('memberName').value.trim() || "عضو أسرة التحرير";
+
+            ctx.clearRect(0, 0, w, h);
+
+            // الخلفية
+            if(t.bg.includes('linear')) {
+                const gradient = ctx.createLinearGradient(0, 0, w, h);
+                const colors = t.bg.match(/#[a-f0-9]{6}/gi);
+                if(colors) {
+                    colors.forEach((c, i) => gradient.addColorStop(i / (colors.length - 1), c));
+                    ctx.fillStyle = gradient;
                 }
-            }
-        }
-
-        // منطق السيناريو
-        function goToStep2() {
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
-            document.getElementById('backBtn').style.display = 'block';
-        }
-
-        function processExtension() {
-            if (isOnline) {
-                showSuccessScreen();
             } else {
-                pendingQueue.push("تمديد مخالفة (1234567890)");
-                saveToLocal();
-                showToast("تم حفظ طلب التمديد للمزامنة");
-                showSuccessScreen();
+                ctx.fillStyle = t.bg;
             }
+            ctx.fillRect(0, 0, w, h);
+
+            // الشريط العلوي الذهبي
+            const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+            gradient.addColorStop(0, 'rgba(212, 165, 116, 0.9)');
+            gradient.addColorStop(1, 'rgba(139, 111, 71, 0.7)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(w/2 - 50, 0, 100, 240);
+
+            // جسم البطاقة
+            const margin = 80;
+            const cardW = w - (margin * 2);
+            const cardH = h - 350;
+            const cardY = 280;
+
+            ctx.save();
+            ctx.fillStyle = config.currentTemplate === 'royal' ? '#ffffff' : 'rgba(255, 255, 255, 0.05)';
+            ctx.shadowBlur = 50;
+            ctx.shadowColor = "rgba(0, 0, 0, 0.25)";
+            ctx.beginPath();
+            ctx.roundRect(margin, cardY, cardW, cardH, 50);
+            ctx.fill();
+            if(config.currentTemplate === 'royal') {
+                ctx.strokeStyle = '#e8c4a0';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // الشعار
+            const logoW = 220;
+            const logoH = 220;
+            ctx.save();
+            ctx.shadowBlur = 30;
+            ctx.shadowColor = "rgba(212, 165, 116, 0.3)";
+            ctx.drawImage(config.logoImg, w/2 - logoW/2, cardY + 50, logoW, logoH);
+            ctx.restore();
+
+            // النصوص الرئيسية
+            ctx.textAlign = 'center';
+            ctx.fillStyle = t.text;
+            ctx.font = 'bold 95px "Tajawal"';
+            ctx.fillText("رمضان مبارك", w/2, cardY + 430);
+
+            ctx.font = '400 48px "Cairo"';
+            ctx.fillStyle = t.secondary;
+            ctx.fillText("تهنئكم صحيفة الحقيقة الإلكترونية", w/2, cardY + 520);
+            ctx.fillText("بحلول شهر رمضان المبارك", w/2, cardY + 590);
+
+            // الصورة الشخصية
+            const imgSize = 380;
+            const imgY = cardY + 680;
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(w/2, imgY + imgSize/2, imgSize/2, 0, Math.PI * 2);
+            ctx.clip();
+            if(config.userImg) {
+                ctx.drawImage(config.userImg, w/2 - imgSize/2, imgY, imgSize, imgSize);
+            } else {
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fillRect(w/2 - imgSize/2, imgY, imgSize, imgSize);
+                ctx.fillStyle = '#ccc';
+                ctx.font = '150px "Cairo"';
+                ctx.fillText("👤", w/2, imgY + imgSize/2 + 50);
+            }
+            ctx.restore();
+            ctx.strokeStyle = t.accent;
+            ctx.lineWidth = 15;
+            ctx.stroke();
+
+            // صندوق الاسم الفاخر
+            const boxW = cardW - 180;
+            const boxY = cardY + 1120;
+            ctx.fillStyle = t.accent;
+            ctx.beginPath();
+            ctx.roundRect(w/2 - boxW/2, boxY, boxW, 160, 30);
+            ctx.fill();
+
+            ctx.fillStyle = config.currentTemplate === 'gold' ? '#2d1810' : '#ffffff';
+            ctx.font = '900 75px "Cairo"';
+            ctx.fillText(name, w/2, boxY + 110);
+
+            // التذييل الفاخر
         }
 
-        function showSuccessScreen() {
-            document.getElementById('step-2').style.display = 'none';
-            document.getElementById('step-3').style.display = 'block';
-            document.getElementById('backBtn').style.display = 'none';
-        }
+        async function processAndDownload() {
+            const name = document.getElementById('memberName').value.trim() || "أسرة_الحقيقة";
+            const btn = document.getElementById('downloadBtn');
+            const status = document.getElementById('statusMsg');
 
-        function resetTrafficCard() {
-            document.getElementById('step-1').style.display = 'block';
-            document.getElementById('step-2').style.display = 'none';
-            document.getElementById('step-3').style.display = 'none';
-            document.getElementById('backBtn').style.display = 'none';
-        }
+            btn.disabled = true;
+            status.innerText = "جاري معالجة الصورة...";
 
-        function processQueue() {
-            showToast(`جاري الاتصال... ${pendingQueue.length} طلبات معلقة 🔄`);
-            setTimeout(() => {
-                const toast = document.getElementById('pendingToast');
-                if(toast) toast.classList.remove('active');
-                alert(`✅ تم استعادة الاتصال ومزامنة:\n- ${pendingQueue.join('\n- ')}`);
-                pendingQueue = [];
-                saveToLocal();
-            }, 2000);
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('pendingToast');
-            if(toast) {
-                document.getElementById('pendingText').innerText = msg;
-                toast.classList.add('active');
+            try {
+                await drawCard();
+                const image = canvas.toDataURL("image/png", 1.0);
+                
+                const link = document.createElement('a');
+                link.style.display = 'none';
+                link.href = image;
+                link.download = `Alhaqiqa_${name}_Ramadan_Premium.png`;
+                
+                document.body.appendChild(link);
+                link.click();
+                
                 setTimeout(() => {
-                    if(pendingQueue.length === 0) toast.classList.remove('active');
-                }, 4000);
+                    document.body.removeChild(link);
+                    status.innerText = "✓ تم التحميل بنجاح!";
+                }, 100);
+
+                const logs = JSON.parse(localStorage.getItem('haqiqa_logs') || '[]');
+                logs.push({ name, time: new Date().toLocaleString('ar-EG'), template: config.currentTemplate });
+                localStorage.setItem('haqiqa_logs', JSON.stringify(logs));
+
+            } catch (err) {
+                console.error(err);
+                status.innerText = "حدث خطأ - جرب متصفح آخر";
+            } finally {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    status.innerText = "جاهز للتحميل بدقة 1080×1620 بجودة عالية";
+                }, 2000);
             }
         }
 
-        function saveToLocal() { localStorage.setItem('absherQueue', JSON.stringify(pendingQueue)); }
-        function toggleNetwork() { updateNetworkStatus(!isOnline); }
-        function clearData() {
-            localStorage.clear();
-            pendingQueue = [];
-            alert('تم مسح الذاكرة المحلية');
-            location.reload();
+        function updateTemplate(id, el) {
+            config.currentTemplate = id;
+            document.querySelectorAll('.template-option').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            drawCard();
         }
+
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('hidden');
+            if(!panel.classList.contains('hidden')) {
+                const logs = JSON.parse(localStorage.getItem('haqiqa_logs') || '[]');
+                document.getElementById('logsList').innerHTML = logs.length ? logs.reverse().map(l => `
+                    <div class="flex justify-between items-center py-5 border-b border-white/10 last:border-b-0">
+                        <span class="text-[10px] text-gray-500 font-light">${l.time}</span>
+                        <span class="text-gold font-bold text-sm">${l.name}</span>
+                    </div>`).join('') : '<p class="text-center py-12 text-gray-600">لا توجد سجلات</p>';
+            }
+        }
+
+        let timer;
+        function debouncedDraw() {
+            clearTimeout(timer);
+            timer = setTimeout(drawCard, 50);
+        }
+
+        initStars();
+        animateStars();
+        window.addEventListener('resize', initStars);
+        window.onload = () => setTimeout(drawCard, 500);
     </script>
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cdaa32e746eacfb',t:'MTc3MTA1MTg5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
